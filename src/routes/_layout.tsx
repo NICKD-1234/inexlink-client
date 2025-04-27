@@ -5,16 +5,14 @@ import {
   NavLink,
   Tooltip,
   UnstyledButton,
-  ActionIcon,
-  Stack,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { createFileRoute, Outlet, Link } from '@tanstack/react-router'
 import { IconHome, IconFileReport, IconFilePlus } from '@tabler/icons-react'
 import classes from './Navbar.module.css'
 
-export const Route = createFileRoute('/')({
-  component: Index,
+export const Route = createFileRoute('/_layout')({
+  component: LayoutComponent,
 })
 
 interface NavbarLinkProps {
@@ -53,7 +51,7 @@ const navLinks = [
   { icon: IconFilePlus, label: 'New Report', link: '/reports/new' },
 ]
 
-function Index() {
+function LayoutComponent() {
   const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true)
 
   const renderNavbarNavLinks = navLinks.map((navLink, index) => {
@@ -99,9 +97,7 @@ function Index() {
         </AppShell.Section>
       </AppShell.Navbar>
 
-      <ActionIcon component={Link}></ActionIcon>
-
-      <AppShell.Main>
+      <AppShell.Main h={'100vh'}>
         <Outlet />
       </AppShell.Main>
     </AppShell>
