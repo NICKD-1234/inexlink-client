@@ -7,7 +7,7 @@ import { type QueryClient } from '@tanstack/react-query'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 
 const isAuthenticated = async () => {
-  return false
+  return true
 }
 
 export const Route = createRootRouteWithContext<{
