@@ -1,11 +1,11 @@
-import * as React from 'react'
+import { AppShell } from '@mantine/core'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/')({
-  component: HomeComponent,
+  component: Index,
 })
 
-function HomeComponent() {
+function Index() {
   return (
     <div className="p-2">
       <h3>Welcome Home!</h3>

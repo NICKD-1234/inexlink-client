@@ -1,36 +1,43 @@
-import * as React from 'react'
-import { Link, Outlet, createRootRoute } from '@tanstack/react-router'
+import {
+  createRootRouteWithContext,
+  redirect,
+  Outlet,
+} from '@tanstack/react-router'
+import { type QueryClient } from '@tanstack/react-query'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 
-export const Route = createRootRoute({
-  component: RootComponent,
+const isAuthenticated = async () => {
+  return false
+}
+
+export const Route = createRootRouteWithContext<{
+  queryClient: QueryClient
+}>()({
+  //Check if user is authenticated
+  beforeLoad: async () => {
+    const res = await isAuthenticated()
+    if (
+      !res &&
+      window.location.pathname !== '/login' &&
+      window.location.pathname !== '/signup'
+    ) {
+      throw redirect({ to: '/login' })
+    } else if (
+      res &&
+      (window.location.pathname === '/login' ||
+        window.location.pathname === '/signup')
+    ) {
+      throw redirect({ to: '/' })
+    }
+  },
+  component: Component,
 })
 
-function RootComponent() {
+function Component() {
   return (
     <>
-      <div className="p-2 flex gap-2 text-lg">
-        <Link
-          to="/"
-          activeProps={{
-            className: 'font-bold',
-          }}
-          activeOptions={{ exact: true }}
-        >
-          Home
-        </Link>{' '}
-        <Link
-          to="/about"
-          activeProps={{
-            className: 'font-bold',
-          }}
-        >
-          About
-        </Link>
-      </div>
-      <hr />
       <Outlet />
-      <TanStackRouterDevtools position="bottom-right" />
+      <TanStackRouterDevtools />
     </>
   )
 }
