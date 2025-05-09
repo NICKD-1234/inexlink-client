@@ -12,8 +12,8 @@ import { IconHome, IconFileReport, IconFilePlus } from '@tabler/icons-react'
 import classes from './Navbar.module.css'
 
 const navLinks = [
-  { icon: IconHome, label: 'Home', link: '/dashboard' },
-  { icon: IconFileReport, label: 'Reports', link: '/reports' },
+  { icon: IconHome, label: 'Home', link: '/' },
+  { icon: IconFileReport, label: 'Reports', link: '/report' },
   { icon: IconFilePlus, label: 'New Report', link: '/reports/new' },
 ]
 

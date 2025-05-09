@@ -13,6 +13,20 @@ declare module '@tanstack/react-router' {
   interface Register {
     router: typeof router
   }
+
+  // Add your custom state types here
+  interface HistoryState {
+    formData?: {
+      manufacturer: string
+      part_name: string
+      serial_id: string
+      equipment_type: string
+      pickup: string
+      delivery: string
+      G_pickup: string
+      G_delivery: string
+    }
+  }
 }
 
 // Configure React Query

@@ -1,43 +1,37 @@
-import {
-  createRootRouteWithContext,
-  redirect,
-  Outlet,
-} from '@tanstack/react-router'
+import { createRootRouteWithContext, Outlet } from '@tanstack/react-router'
 import { type QueryClient } from '@tanstack/react-query'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 
-const isAuthenticated = async () => {
-  return true
-}
+import { AppShell } from '@mantine/core'
+import { useDisclosure } from '@mantine/hooks'
+import Navbar from '@/components/Layout/Navbar/Navbar'
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient
 }>()({
-  //Check if user is authenticated
-  beforeLoad: async () => {
-    const res = await isAuthenticated()
-    if (
-      !res &&
-      window.location.pathname !== '/login' &&
-      window.location.pathname !== '/signup'
-    ) {
-      throw redirect({ to: '/login' })
-    } else if (
-      res &&
-      (window.location.pathname === '/login' ||
-        window.location.pathname === '/signup')
-    ) {
-      throw redirect({ to: '/' })
-    }
-  },
   component: Component,
 })
 
 function Component() {
+  const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true)
+
   return (
-    <>
-      <Outlet />
-      <TanStackRouterDevtools />
-    </>
+    <AppShell
+      navbar={{
+        width: { base: desktopOpened ? 260 : 60 },
+        breakpoint: 'sm',
+      }}
+      padding="md"
+    >
+      {/* Navbar content */}
+      <AppShell.Navbar p="md">
+        <Navbar desktopOpened={desktopOpened} toggleDesktop={toggleDesktop} />
+      </AppShell.Navbar>
+
+      <AppShell.Main h={'100vh'}>
+        <Outlet />
+        <TanStackRouterDevtools />
+      </AppShell.Main>
+    </AppShell>
   )
 }
