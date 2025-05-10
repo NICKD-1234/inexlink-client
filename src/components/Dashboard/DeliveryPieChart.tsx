@@ -29,8 +29,8 @@ const DeliveryPieChart: React.FC<PieChartProps> = ({
   }
 
   const options = {
-    //responsive: true,
-    //maintainAspectRatio: false, // Add this
+    responsive: true,
+    maintainAspectRatio: false, // Add this
     plugins: {
       title: {
         display: !!title,
@@ -48,9 +48,13 @@ const DeliveryPieChart: React.FC<PieChartProps> = ({
 
   // Then in the return:
   return (
-    // <div style={{ position: 'relative', height: '100%', width: '100%' }}>
-    <Pie data={data} options={options} />
-    // </div>
+    <div
+      style={{
+        aspectRatio: '2 / 1', // ensures a square shape
+      }}
+    >
+      <Pie data={data} options={options} />
+    </div>
   )
 }
 

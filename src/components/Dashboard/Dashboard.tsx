@@ -100,63 +100,15 @@ export default function Dashboard() {
             </Paper>
           </Grid.Col>
 
-          {/* <Grid.Col span={12}>
+          <Grid.Col span={12}>
             <Paper shadow="sm" radius="md" p="xs" withBorder>
               <div
                 dangerouslySetInnerHTML={{ __html: dashboardData.map_html }}
               />
             </Paper>
-          </Grid.Col> */}
+          </Grid.Col>
         </Grid>
       </Container>
     </>
   )
 }
-// return (
-//   <Container w={'100%'} my="md">
-//     <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">
-//       {isLoading ? (
-//         <Skeleton height={PRIMARY_COL_HEIGHT} radius="md" animate={false} />
-//       ) : (
-//         <div style={{ maxWidth: '400px' }}>
-//           <DeliveryPieChart
-//             labels={dashboardData.chart_data.labels}
-//             values={dashboardData.chart_data.values}
-//             colors={dashboardData.chart_data.colors}
-//             title="Global vs Local Emissions"
-//           />
-//         </div>
-//       )}
-
-//       <Grid gutter="md">
-//         <Grid.Col>
-//           <MaterialEmissionChart
-//             labels={dashboardData.component_chart.labels}
-//             values={dashboardData.component_chart.values}
-//             colors={dashboardData.component_chart.colors}
-//             title="Component-wise Emissions"
-//           />
-//         </Grid.Col>
-
-//         <Grid.Col span={6}>
-//           <Skeleton height={SECONDARY_COL_HEIGHT} radius="md" animate={false} />
-//         </Grid.Col>
-
-//         <Grid.Col span={6}>
-//           <Skeleton height={SECONDARY_COL_HEIGHT} radius="md" animate={false} />
-//         </Grid.Col>
-//       </Grid>
-//     </SimpleGrid>
-
-//     {/* Map */}
-//     {/* {!isLoading && (
-//       <div
-//         style={{
-//           width: '100%',
-//           marginTop: '1rem',
-//         }}
-//         dangerouslySetInnerHTML={{ __html: dashboardData.map_html }}
-//       />
-//     )} */}
-//   </Container>
-// )

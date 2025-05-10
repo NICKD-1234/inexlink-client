@@ -40,8 +40,8 @@ const MaterialEmissionChart: React.FC<EmissionChartProps> = ({
 
   // Bar chart options with an optional title
   const options = {
-    //responsive: true,
-    //maintainAspectRatio: false,
+    responsive: true,
+    maintainAspectRatio: false,
     scales: {
       y: {
         beginAtZero: true,
@@ -64,10 +64,13 @@ const MaterialEmissionChart: React.FC<EmissionChartProps> = ({
   }
 
   return (
-    // <div style={{ position: 'relative', height: '100%', width: '100%' }}>
-    //   <Bar data={data} options={options} />
-    // </div>
-    <Bar data={data} options={options} />
+    <div
+      style={{
+        aspectRatio: '2 / 1', // ensures a square shape
+      }}
+    >
+      <Bar data={data} options={options} />
+    </div>
   )
 }
 
