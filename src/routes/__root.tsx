@@ -28,7 +28,7 @@ function Component() {
         <Navbar desktopOpened={desktopOpened} toggleDesktop={toggleDesktop} />
       </AppShell.Navbar>
 
-      <AppShell.Main h={'100vh'}>
+      <AppShell.Main bg={'#f8f9fa'} h={'100vh'}>
         <Outlet />
         <TanStackRouterDevtools />
       </AppShell.Main>

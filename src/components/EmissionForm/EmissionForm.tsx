@@ -9,6 +9,7 @@ import {
   Container,
   Title,
   Space,
+  Paper,
   Radio,
   Autocomplete,
 } from '@mantine/core'
@@ -79,14 +80,10 @@ export default function EmissionForm() {
     validate: {
       manufacturer: (value) =>
         value.trim().length === 0 ? 'Manufacturer is required' : null,
-      //   pickup: (value, values) =>
-      //     values.location_type && !value.trim()
-      //       ? 'Pickup location is required'
-      //       : null,
-      //   delivery: (value, values) =>
-      //     values.location_type && !value.trim()
-      //       ? 'Delivery location is required'
-      //       : null,
+      pickup: (value) =>
+        value.trim().length === 0 ? 'Pickup location is required' : null,
+      delivery: (value) =>
+        value.trim().length === 0 ? 'Delivery location is required' : null,
     },
   })
 
@@ -152,7 +149,7 @@ export default function EmissionForm() {
   }
 
   return (
-    <Container>
+    <Paper w={"60%"} shadow="sm" radius="md" p="md" withBorder>
       <Title order={2}>Carbon Emission Calculator</Title>
       <Space h="xl" />
       <form onSubmit={form.onSubmit(handleSubmit)}>
@@ -186,32 +183,6 @@ export default function EmissionForm() {
           {...form.getInputProps('equipment_type')}
         />
         <Space h="md" />
-        {/* <Radio.Group
-          label="Location Type"
-          {...form.getInputProps('location_type')}
-        >
-          <Group mt="xs">
-            <Radio value="Local" label="Local" />
-            <Radio value="Global" label="Global" />
-          </Group>
-        </Radio.Group>
-        <Space h="md" />
-
-        <TextInput
-          label={`${form.values.location_type} Pickup`}
-          placeholder="Pickup location"
-          {...form.getInputProps('pickup')}
-          required
-        />
-        <Space h="md" />
-
-        <TextInput
-          label={`${form.values.location_type} Delivery`}
-          placeholder="Delivery location"
-          {...form.getInputProps('delivery')}
-          required
-        />
-        <Space h="md" /> */}
         <TextInput
           label="Pickup"
           placeholder="Pickup"
@@ -242,6 +213,6 @@ export default function EmissionForm() {
           </Button>
         </Group>
       </form>
-    </Container>
+    </Paper>
   )
 }

@@ -2,6 +2,8 @@ import { create } from 'zustand'
 
 export interface DashboardState {
   final_emission: number
+  logistics_info: any
+  G_logistics_info: any
   chart_data: any
   component_chart: any
   map_html: any

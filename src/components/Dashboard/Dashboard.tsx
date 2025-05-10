@@ -1,31 +1,22 @@
 import React, { useEffect } from 'react'
-import { Container, Grid, Skeleton, SimpleGrid } from '@mantine/core'
-import { Pie, Bar } from 'react-chartjs-2'
+import {
+  Container,
+  Grid,
+  Paper,
+  Title,
+  Center,
+  Skeleton,
+  SimpleGrid,
+} from '@mantine/core'
 
 import { useQuery, useMutation } from '@tanstack/react-query'
 import axios from 'axios'
 
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-} from 'chart.js'
-
-ChartJS.register(
-  ArcElement,
-  Tooltip,
-  Legend,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-)
-
 import { useDashboardStore, type DashboardState } from '@/stores/dashboardStore'
 import EmissionForm from '../EmissionForm/EmissionForm'
+
+import DeliveryPieChart from './DeliveryPieChart'
+import MaterialEmissionChart from './MaterialEmissionsChart'
 
 const PRIMARY_COL_HEIGHT = '300px'
 
@@ -38,126 +29,134 @@ export default function Dashboard() {
   //   enabled: !!formData, // Only run the query if formData is available
   // })
 
-  const SECONDARY_COL_HEIGHT = `calc(${PRIMARY_COL_HEIGHT} / 2 - var(--mantine-spacing-md) / 2)`
-
-  const isLoading = !dashboardData
+  const SECONDARY_COL_HEIGHT = `calc(${PRIMARY_COL_HEIGHT} / 2.5 - var(--mantine-spacing-md) / 2)`
 
   if (!dashboardData) {
     return (
-      <Container my="md">
+      <Center h={'100%'}>
         <EmissionForm />
-      </Container>
+      </Center>
     )
   }
 
   return (
-    <Container my="md">
-      <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">
-        {/* <Skeleton height={PRIMARY_COL_HEIGHT} radius="md" animate={false} /> */}
-        {isLoading ? (
-          <Skeleton height={PRIMARY_COL_HEIGHT} radius="md" animate={false} />
-        ) : (
-          <div
-            style={{ marginTop: '40px' }}
-            dangerouslySetInnerHTML={{ __html: dashboardData.map_html }}
-          />
-        )}
+    <>
+      <Title px={'sm'}>Emissions Dashboard</Title>
+      <Container fluid my="md">
+        <Grid>
+          <Grid.Col span={4}>
+            <Paper
+              shadow="sm"
+              radius="md"
+              p="md"
+              withBorder
+              style={{ height: SECONDARY_COL_HEIGHT }}
+            >
+              1
+            </Paper>
+          </Grid.Col>
+          <Grid.Col span={4}>
+            <Paper
+              shadow="sm"
+              radius="md"
+              p="md"
+              withBorder
+              style={{ height: SECONDARY_COL_HEIGHT }}
+            >
+              2
+            </Paper>
+          </Grid.Col>
+          <Grid.Col span={4}>
+            <Paper
+              shadow="sm"
+              radius="md"
+              p="md"
+              withBorder
+              style={{ height: SECONDARY_COL_HEIGHT }}
+            >
+              3
+            </Paper>
+          </Grid.Col>
 
-        {/* //<div style={{ maxWidth: '500px', margin: 'auto' }}>
-          // <div>
-          //   <h3>Global vs Local Emissions</h3>
-          //   <Pie
-          //     data={{
-          //       labels: dashboardData.chart_data.labels,
-          //       datasets: [
-          //         {
-          //           data: dashboardData.chart_data.values,
-          //           backgroundColor: dashboardData.chart_data.colors,
-          //         },
-          //       ],
-          //     }}
-          //   />
-            // </div> */}
+          <Grid.Col span={6}>
+            <Paper shadow="sm" radius="md" p="md" withBorder>
+              <MaterialEmissionChart
+                labels={dashboardData.component_chart.labels}
+                values={dashboardData.component_chart.values}
+                colors={dashboardData.component_chart.colors}
+                title="Component-wise Emissions"
+              />
+            </Paper>
+          </Grid.Col>
 
-        <Grid gutter="md">
-          <Grid.Col>
-            <Skeleton
-              height={SECONDARY_COL_HEIGHT}
-              radius="md"
-              animate={false}
-            />
-          </Grid.Col>
           <Grid.Col span={6}>
-            <Skeleton
-              height={SECONDARY_COL_HEIGHT}
-              radius="md"
-              animate={false}
-            />
+            <Paper shadow="sm" radius="md" p="md" withBorder>
+              <DeliveryPieChart
+                labels={dashboardData.chart_data.labels}
+                values={dashboardData.chart_data.values}
+                colors={dashboardData.chart_data.colors}
+                title="Global vs Local Emissions"
+              />
+            </Paper>
           </Grid.Col>
-          <Grid.Col span={6}>
-            <Skeleton
-              height={SECONDARY_COL_HEIGHT}
-              radius="md"
-              animate={false}
-            />
-          </Grid.Col>
+
+          {/* <Grid.Col span={12}>
+            <Paper shadow="sm" radius="md" p="xs" withBorder>
+              <div
+                dangerouslySetInnerHTML={{ __html: dashboardData.map_html }}
+              />
+            </Paper>
+          </Grid.Col> */}
         </Grid>
-      </SimpleGrid>
-    </Container>
+      </Container>
+    </>
   )
 }
+// return (
+//   <Container w={'100%'} my="md">
+//     <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">
+//       {isLoading ? (
+//         <Skeleton height={PRIMARY_COL_HEIGHT} radius="md" animate={false} />
+//       ) : (
+//         <div style={{ maxWidth: '400px' }}>
+//           <DeliveryPieChart
+//             labels={dashboardData.chart_data.labels}
+//             values={dashboardData.chart_data.values}
+//             colors={dashboardData.chart_data.colors}
+//             title="Global vs Local Emissions"
+//           />
+//         </div>
+//       )}
 
-{
-  /* <Grid.Col span={{ base: 12, xs: 4 }}>
-          {isLoading ? (
-            <Skeleton height={200} />
-          ) : (
-            <div style={{ maxWidth: '500px', margin: 'auto' }}>
-              <h3>Global vs Local Emissions</h3>
-              <Pie
-                data={{
-                  labels: dashboardData.chart_data.labels,
-                  datasets: [
-                    {
-                      data: dashboardData.chart_data.values,
-                      backgroundColor: dashboardData.chart_data.colors,
-                    },
-                  ],
-                }}
-              />
-            </div>
-          )}
-        </Grid.Col>
+//       <Grid gutter="md">
+//         <Grid.Col>
+//           <MaterialEmissionChart
+//             labels={dashboardData.component_chart.labels}
+//             values={dashboardData.component_chart.values}
+//             colors={dashboardData.component_chart.colors}
+//             title="Component-wise Emissions"
+//           />
+//         </Grid.Col>
 
-        <Grid.Col span={{ base: 12, xs: 8 }}>
-          {isLoading ? (
-            <Skeleton height={200} />
-          ) : (
-            <div
-              style={{ maxWidth: '600px', margin: 'auto', marginTop: '30px' }}
-            >
-              <h3>Component-wise Emissions</h3>
-              <Bar
-                data={{
-                  labels: dashboardData.component_chart.labels,
-                  datasets: [
-                    {
-                      label: 'Emissions (kg CO₂)',
-                      data: dashboardData.component_chart.values,
-                      backgroundColor: dashboardData.component_chart.colors,
-                    },
-                  ],
-                }}
-                options={{
-                  scales: {
-                    y: {
-                      beginAtZero: true,
-                      title: { display: true, text: 'Emissions (kg CO₂)' },
-                    },
-                  },
-                }}
-              />
-            </div>
-          )}
-        </Grid.Col> */
-}
+//         <Grid.Col span={6}>
+//           <Skeleton height={SECONDARY_COL_HEIGHT} radius="md" animate={false} />
+//         </Grid.Col>
+
+//         <Grid.Col span={6}>
+//           <Skeleton height={SECONDARY_COL_HEIGHT} radius="md" animate={false} />
+//         </Grid.Col>
+//       </Grid>
+//     </SimpleGrid>
+
+//     {/* Map */}
+//     {/* {!isLoading && (
+//       <div
+//         style={{
+//           width: '100%',
+//           marginTop: '1rem',
+//         }}
+//         dangerouslySetInnerHTML={{ __html: dashboardData.map_html }}
+//       />
+//     )} */}
+//   </Container>
+// )
