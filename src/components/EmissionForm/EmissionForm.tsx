@@ -64,7 +64,11 @@ interface FormState {
   G_delivery: string
 }
 
-export default function EmissionForm() {
+interface EmissionFormProps {
+  onSuccess?: () => void // Add this prop to handle modal closing after success
+}
+
+export default function EmissionForm({ onSuccess }: EmissionFormProps) {
   const form = useForm<FormState>({
     initialValues: {
       manufacturer: '',
@@ -137,6 +141,7 @@ export default function EmissionForm() {
     mutationFn: fetchDashboardData,
     onSuccess: (data) => {
       useDashboardStore.getState().setDashboardState(data)
+      if (onSuccess) onSuccess() // Close the modal after successful submission
     },
     onError: (error) => {
       console.error('Submission failed:', error)
@@ -149,7 +154,8 @@ export default function EmissionForm() {
   }
 
   return (
-    <Paper w={"60%"} shadow="sm" radius="md" p="md" withBorder>
+    // <Paper w={'100%'} shadow="sm" radius="md" p="md" withBorder>
+    <>
       <Title order={2}>Carbon Emission Calculator</Title>
       <Space h="xl" />
       <form onSubmit={form.onSubmit(handleSubmit)}>
@@ -213,6 +219,7 @@ export default function EmissionForm() {
           </Button>
         </Group>
       </form>
-    </Paper>
+      {/* </Paper> */}
+    </>
   )
 }

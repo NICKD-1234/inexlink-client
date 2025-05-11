@@ -11,7 +11,7 @@ import {
 } from 'chart.js'
 
 // Register necessary components of Chart.js
-ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend, Title)
+ChartJS.register(BarElement, CategoryScale, Legend, LinearScale, Tooltip, Title)
 
 type EmissionChartProps = {
   labels: string[] // Labels for the bar chart
@@ -42,13 +42,11 @@ const MaterialEmissionChart: React.FC<EmissionChartProps> = ({
   const options = {
     responsive: true,
     maintainAspectRatio: false,
-    scales: {
-      y: {
-        beginAtZero: true,
-        title: { display: true, text: 'Emissions (kg CO₂)' },
-      },
-    },
+
     plugins: {
+      legend: {
+        display: false, // 💡 This removes the legend completely
+      },
       title: {
         display: !!title, // Show title only if provided
         text: title,

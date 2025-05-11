@@ -13,8 +13,7 @@ import classes from './Navbar.module.css'
 
 const navLinks = [
   { icon: IconHome, label: 'Home', link: '/' },
-  { icon: IconFileReport, label: 'Reports', link: '/report' },
-  { icon: IconFilePlus, label: 'New Report', link: '/reports/new' },
+  { icon: IconFileReport, label: 'Report', link: '/report' },
 ]
 
 interface NavbarLinkProps {
