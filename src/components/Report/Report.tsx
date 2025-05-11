@@ -32,12 +32,11 @@ ChartJS.register(
   Title,
 )
 
-// =================== Chart Component ===================
-
+// =================== Chart Components ===================
 import MaterialEmissionChart from '../Dashboard/MaterialEmissionsChart'
+import DeliveryPieChart from '../Dashboard/DeliveryPieChart'
 
 // =================== Styles ===================
-
 const styles = StyleSheet.create({
   page: {
     flexDirection: 'column',
@@ -83,16 +82,20 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     objectFit: 'contain',
   },
+  chartContainer: {
+    marginBottom: 30,
+  },
 })
 
 // =================== PDF Document ===================
-
 const PDFDocument = ({
   data,
   materialImage,
+  deliveryImage,
 }: {
   data: any
   materialImage: string
+  deliveryImage: string
 }) => (
   <Document>
     <Page size="A4" style={styles.page}>
@@ -123,35 +126,56 @@ const PDFDocument = ({
         </Text>
       </View>
 
-      <Text style={styles.subheader}>Emissions Breakdown</Text>
-      {materialImage && <Image src={materialImage} style={styles.chartImage} />}
+      <View style={styles.chartContainer}>
+        <Text style={styles.subheader}>Material Emissions Breakdown</Text>
+        {materialImage && (
+          <Image src={materialImage} style={styles.chartImage} />
+        )}
+      </View>
+
+      <View style={styles.chartContainer}>
+        <Text style={styles.subheader}>Delivery Method Distribution</Text>
+        {deliveryImage && (
+          <Image src={deliveryImage} style={styles.chartImage} />
+        )}
+      </View>
     </Page>
   </Document>
 )
 
 // =================== Chart Renderer ===================
-
 const ChartImageRenderer = ({ data }: { data: any }) => {
   const materialRef = useRef<HTMLDivElement>(null)
+  const deliveryRef = useRef<HTMLDivElement>(null)
   const [materialImage, setMaterialImage] = useState<string | null>(null)
+  const [deliveryImage, setDeliveryImage] = useState<string | null>(null)
 
   useEffect(() => {
-    const capture = async () => {
+    const captureCharts = async () => {
+      // Capture Material Emissions Chart
       if (materialRef.current) {
-        // Add a small delay to ensure the chart is rendered
         await new Promise((resolve) => setTimeout(resolve, 500))
-
-        const canvas = await html2canvas(materialRef.current, {
-          scale: 2, // Higher quality
-          logging: true, // Helpful for debugging
+        const materialCanvas = await html2canvas(materialRef.current, {
+          scale: 2,
+          logging: true,
           useCORS: true,
         })
-        const imgData = canvas.toDataURL('image/png')
-        setMaterialImage(imgData)
+        setMaterialImage(materialCanvas.toDataURL('image/png'))
+      }
+
+      // Capture Delivery Pie Chart
+      if (deliveryRef.current) {
+        await new Promise((resolve) => setTimeout(resolve, 500))
+        const deliveryCanvas = await html2canvas(deliveryRef.current, {
+          scale: 2,
+          logging: true,
+          useCORS: true,
+        })
+        setDeliveryImage(deliveryCanvas.toDataURL('image/png'))
       }
     }
 
-    capture()
+    captureCharts()
   }, [data])
 
   return (
@@ -162,11 +186,15 @@ const ChartImageRenderer = ({ data }: { data: any }) => {
           position: 'fixed',
           left: '-10000px',
           top: 0,
-          width: '600px', // Explicit width
-          height: '400px', // Explicit height
+          width: '600px',
+          height: '800px', // Increased height to accommodate both charts
         }}
       >
-        <div ref={materialRef} style={{ width: '100%', height: '100%' }}>
+        {/* Material Emissions Chart */}
+        <div
+          ref={materialRef}
+          style={{ width: '100%', height: '400px', marginBottom: '20px' }}
+        >
           <MaterialEmissionChart
             labels={data.component_chart.labels}
             values={data.component_chart.values}
@@ -174,12 +202,26 @@ const ChartImageRenderer = ({ data }: { data: any }) => {
             title="Material Emissions Breakdown"
           />
         </div>
+
+        {/* Delivery Pie Chart */}
+        <div ref={deliveryRef} style={{ width: '100%', height: '400px' }}>
+          <DeliveryPieChart
+            labels={data.delivery_chart.labels}
+            values={data.delivery_chart.values}
+            colors={data.delivery_chart.colors}
+            title="Delivery Method Distribution"
+          />
+        </div>
       </div>
 
-      {/* Render PDF after image is ready */}
-      {materialImage ? (
+      {/* Render PDF after images are ready */}
+      {materialImage && deliveryImage ? (
         <PDFViewer width="100%" height="100%">
-          <PDFDocument data={data} materialImage={materialImage} />
+          <PDFDocument
+            data={data}
+            materialImage={materialImage}
+            deliveryImage={deliveryImage}
+          />
         </PDFViewer>
       ) : (
         <div>Generating report...</div>
@@ -189,7 +231,6 @@ const ChartImageRenderer = ({ data }: { data: any }) => {
 }
 
 // =================== Main Export Component ===================
-
 export const Report = () => {
   const dummyData = {
     final_emission: 1234,
@@ -202,6 +243,11 @@ export const Report = () => {
       labels: ['Steel', 'Aluminum', 'Plastic'],
       values: [600, 300, 100],
       colors: ['#FF6384', '#36A2EB', '#FFCE56'],
+    },
+    delivery_chart: {
+      labels: ['Air Freight', 'Sea Freight', 'Road Transport'],
+      values: [400, 700, 300],
+      colors: ['#FF9F40', '#4BC0C0', '#9966FF'],
     },
   }
 
